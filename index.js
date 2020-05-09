@@ -20,14 +20,14 @@ function CNS(options) {
     const web3 = new Web3(provider);
     const registryContract = new web3.eth.Contract(registryABI, registry);
 
-    const getResolver = (tokenId) => {
+    function getResolver(tokenId) {
 
         if (verbose) {
             console.log('HIT getResolver function')
             console.log('Provider.addresses[0]: ' + provider.addresses[0])
         }
 
-        let result =registryContract.methods.resolverOf(tokenId)
+        let result = registryContract.methods.resolverOf(tokenId)
             .call({ from: provider.addresses[0] });
 
         if (verbose) {
@@ -36,7 +36,7 @@ function CNS(options) {
         return result;
     }
 
-    const getResolverContract = async (tokenId) => {
+    async function getResolverContract(tokenId){
 
         if (verbose) {
             console.log('HIT getResolverContract function')
@@ -70,7 +70,7 @@ function CNS(options) {
         return result;
     }
 
-    this.getContentHash = async () => {
+    async function getContentHash() {
         if (verbose) {
             console.log('Getting content...')
             console.log('Name: ' + name)
@@ -87,7 +87,7 @@ function CNS(options) {
             .call({ from: provider.addresses[0] });
     }
 
-    this.setContentHash = async ({ contentHash, contentType }) => {
+    async function setContentHash({ contentHash, contentType }) {
 
         if (verbose) {
             console.log('HIT setContentHash function')
