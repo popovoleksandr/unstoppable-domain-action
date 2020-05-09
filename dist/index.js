@@ -2281,20 +2281,23 @@ try {
         console.log(`Content hash is up to date. [${current.hash}]`);
         return;
     }
+
+    if (dryrun) {
+        return;
+    }
+
+    const result = resolverContract.methods.set(ipfsKey, contentHash, tokenId)
+        .send({ from: provider.addresses[0] });
+
+    if (verbose) {
+        console.log(`Tx hash ${result}`);
+    }
+
+    core.setOutput("tx-hash", result);
 } catch (error) {
     core.warning(error);
 }
 
-if (dryrun) {
-    return;
-}
-
-const result = resolverContract.methods.set(ipfsKey, contentHash, tokenId)
-    .send({ from: provider.addresses[0] });
-
-if (verbose) {
-    console.log(`Tx hash ${result}`);
-}
 
 /***/ }),
 /* 35 */

@@ -24,9 +24,9 @@ inputs:
     description: 'Execution emulation without setting new content hash'
     required: false
     default: false
-#outputs:
-#  hash:
-#    description: 'uploaded hash'
+outputs:
+  tx-hash:
+    description: 'Result Tx hash'
 runs:
   using: 'node12'
   main: 'dist/index.js'
