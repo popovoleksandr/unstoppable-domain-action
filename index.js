@@ -24,6 +24,7 @@ function CNS(options) {
 
         if (verbose) {
             console.log('HIT getResolver function')
+            console.log('Provider: ' + provider)
         }
 
         return registryContract.methods.resolverOf(tokenId)
@@ -34,6 +35,7 @@ function CNS(options) {
 
         if (verbose) {
             console.log('HIT getResolverContract function')
+            console.log('TokenId: ' + tokenId)
         }
 
         let resolver;
@@ -101,6 +103,12 @@ async function update(options) {
     let current;
     try {
         current = await updater.getContentHash();
+
+        if (verbose) {
+            console.log('Current hash: ' + current)
+            console.log('Target hash: ' + contentHash)
+        }
+
         if (current.hash === contentHash) {
             console.log(`Content hash is up to date. [${current.hash}]`);
             return;
