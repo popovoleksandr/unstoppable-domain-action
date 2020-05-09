@@ -69,7 +69,7 @@ async function update(options) {
     // validate(options);
 
     const { name, contentHash, contentType, verbose } = options;
-    const { factory } = (options) => { return new CNS(options) };
+    const factory = (options) => { return new CNS(options) };
     const updater = await factory(options);
 
     let current;
