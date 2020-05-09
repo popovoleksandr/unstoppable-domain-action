@@ -11,7 +11,7 @@ jobs:
         with:
           mnemonic: ${{ secrets.ACTION_MNEMONIC }}
           rpc: ${{ secrets.ACTION_RPC }}
-          name: ddns-action.crypto
+          name: aleksandrpopov.crypto
           contentHash: 'QmaWTzJ8qQo6jKrRRn9xqZkHE3tMbjK6b2F41dc5EaJ4UM'
           verbose: true
           dryrun: false
