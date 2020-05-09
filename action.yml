@@ -4,7 +4,7 @@ branding:
   icon: 'server'
   color: 'white'
 inputs:
-  crypto-domain:
+  name:
     description: 'Crypto domain'
     required: true
   hash:
