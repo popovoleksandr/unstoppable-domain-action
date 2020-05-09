@@ -102,7 +102,7 @@ async function run() {
         const dryrun = (core.getInput('dryRun') === 'true');
         const verbose = (core.getInput('verbose') === 'true');
 
-        await this.update({ mnemonic, rpc, name, contentHash, contentType, dryrun, verbose })
+        await update({ mnemonic, rpc, name, contentHash, contentType, dryrun, verbose })
             .catch(error => { throw error });
 
         if (verbose) {
