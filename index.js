@@ -95,8 +95,8 @@ async function update(options) {
         console.log('HIT update function')
     }
 
-    const factory = (options) => { return new CNS(options) };
-    const updater = await factory(options);
+    // const factory = (options) => { return new CNS(options) };
+    const updater = await new CNS(options);
 
     let current;
     try {
