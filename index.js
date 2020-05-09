@@ -24,15 +24,16 @@ function CNS(options) {
 
         if (verbose) {
             console.log('HIT getResolver function')
-            console.log('Provider: ' + provider)
+            console.log('Provider: ' + JSON.stringify(provider))
             console.log('Provider.addresses[0]: ' + provider.addresses[0])
+            console.log('Resolver: ' + JSON.stringify(registryContract.methods.resolverOf(tokenId)))
         }
 
         let result =registryContract.methods.resolverOf(tokenId)
             .call({ from: provider.addresses[0] });
 
         if (verbose) {
-            console.log('Resolver: ' + JSON.stringify(result))
+            console.log('Result: ' + JSON.stringify(result))
         }
         return result;
     }
@@ -54,7 +55,14 @@ function CNS(options) {
             throw new Error('Resolver not found');
         }
 
-        return new web3.eth.Contract(resolverABI, resolver);
+        const result = new web3.eth.Contract(resolverABI, resolver);
+
+        if (verbose) {
+            console.log('CONTINUE getResolverContract function')
+            console.log('ResolverContract: ' + result)
+        }
+
+        return result;
     }
 
     this.getContentHash = async () => {
