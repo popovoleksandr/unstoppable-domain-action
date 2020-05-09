@@ -2249,25 +2249,6 @@ const provider = new HDWalletProvider(mnemonic, rpc);
 const web3 = new Web3(provider);
 const registryContract = new web3.eth.Contract(registryABI, registry);
 
-const getResolver = (tokenId) => {
-    return registryContract.methods.resolverOf(tokenId)
-        .call({ from: provider.addresses[0] });
-}
-
-const getResolverContract = async (tokenId) => {
-    let resolver;
-    try {
-        resolver = await getResolver(tokenId);
-    } catch (error) {
-        if (verbose) {
-            console.error(error);
-        }
-        throw new Error('Resolver not found');
-    }
-
-    return new web3.eth.Contract(resolverABI, resolver);
-}
-
 let current;
 try {
 
@@ -2276,7 +2257,19 @@ try {
     }
 
     const tokenId = namehash(name);
-    const resolverContract = getResolverContract(tokenId);
+
+    let resolver;
+    try {
+        resolver = registryContract.methods.resolverOf(tokenId)
+            .call({ from: provider.addresses[0] });
+    } catch (error) {
+        if (verbose) {
+            console.error(error);
+        }
+        throw new Error('Resolver not found');
+    }
+
+    const resolverContract = new web3.eth.Contract(resolverABI, resolver);
 
     current =  resolverContract.methods.get(ipfsKey, tokenId)
         .call({ from: provider.addresses[0] });
