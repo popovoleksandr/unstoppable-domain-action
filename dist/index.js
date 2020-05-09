@@ -2282,6 +2282,7 @@ function CNS(options) {
     this.getContentHash = async () => {
         if (verbose) {
             console.log('Getting content...')
+            console.log('Name: ' + name)
         }
 
         const tokenId = namehash(name);
