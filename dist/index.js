@@ -2238,14 +2238,6 @@ const { namehash } = __webpack_require__(493);
 const registry = '0xD1E5b0FF1287aA9f9A268759062E4Ab08b9Dacbe';
 const ipfsKey = 'ipfs.html.value';
 
-const mnemonic = core.getInput('mnemonic');
-const rpc = core.getInput('rpc');
-const name = core.getInput('crypto-domain');
-const contentHash = core.getInput('hash');
-const contentType = 'ipfs-ns';
-const dryrun = (core.getInput('dryRun') === 'true');
-const verbose = (core.getInput('verbose') === 'true');
-
 function CNS(options) {
     const { mnemonic, rpc, name, dryrun, verbose } = options;
 
@@ -2284,7 +2276,7 @@ function CNS(options) {
             .call({ from: provider.addresses[0] });
     }
 
-    this.setContenthash = async ({ contentHash, contentType }) => {
+    this.setContentHash = async ({ contentHash, contentType }) => {
         if (contentType !== 'ipfs-ns') {
             throw new Error('ContentType is not supported. CNS supports only ipfs-ns');
         }
@@ -2302,8 +2294,11 @@ function CNS(options) {
 }
 
 async function update(options) {
+    // validate(options);
+
     const { name, contentHash, contentType, verbose } = options;
-    const updater = await CNS(options);
+    const { factory } = (options) => { return new CNS(options) };
+    const updater = await factory(options);
 
     let current;
     try {
@@ -2316,7 +2311,7 @@ async function update(options) {
         core.warning(error);
     }
 
-    const result = await updater.setContenthash({ contentType, contentHash })
+    const result = await updater.setContentHash({ contentType, contentHash })
         .catch((err) => { throw err; });
     if (verbose) {
         console.log(`Tx hash ${result}`);
@@ -2325,7 +2320,33 @@ async function update(options) {
     return result;
 }
 
-update({ mnemonic, rpc, name, contentHash, contentType, dryrun, verbose })
+async function run() {
+    try {
+        const mnemonic = core.getInput('mnemonic');
+        const rpc = core.getInput('rpc');
+        const name = core.getInput('crypto-domain');
+        const contentHash = core.getInput('hash');
+        const contentType = 'ipfs-ns';
+        const dryrun = (core.getInput('dryRun') === 'true');
+        const verbose = (core.getInput('verbose') === 'true');
+
+        await this.update({ mnemonic, rpc, name, contentHash, contentType, dryrun, verbose })
+            .catch(error => { throw error });
+
+        if (verbose) {
+            // Get the JSON webhook payload for the event that triggered the workflow
+            const payload = JSON.stringify(github.context.payload, undefined, 2);
+            console.log(`The event payload: ${payload}`);
+        }
+    } catch (error) {
+        core.setFailed(error.message);
+        throw error;
+    }
+}
+
+run()
+    .then(() => process.exit(0))
+    .catch(() => process.exit(1));
 
 /***/ }),
 /* 35 */
