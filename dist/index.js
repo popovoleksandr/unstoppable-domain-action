@@ -2253,10 +2253,16 @@ function CNS(options) {
         if (verbose) {
             console.log('HIT getResolver function')
             console.log('Provider: ' + provider)
+            console.log('Provider.addresses[0]: ' + provider.addresses[0])
         }
 
-        return registryContract.methods.resolverOf(tokenId)
+        let result =registryContract.methods.resolverOf(tokenId)
             .call({ from: provider.addresses[0] });
+
+        if (verbose) {
+            console.log('Resolver: ' + JSON.stringify(result))
+        }
+        return result;
     }
 
     const getResolverContract = async (tokenId) => {
