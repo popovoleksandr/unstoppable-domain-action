@@ -2280,6 +2280,8 @@ function CNS(options) {
                 console.log('Resolver: ' + resolver)
             }
         } catch (error) {
+            console.log('CONTINUE getResolverContract function ERROR')
+
             if (verbose) {
                 console.error(error);
             }
