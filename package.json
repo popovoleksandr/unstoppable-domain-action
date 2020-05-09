@@ -1,0 +1,27 @@
+{
+  "name": "unstoppable-domain-action",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anantaramdas/ipfs-pinata-deploy-action.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anantaramdas/ipfs-pinata-deploy-action/issues"
+  },
+  "homepage": "https://github.com/anantaramdas/ipfs-pinata-deploy-action#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.4",
+    "@actions/github": "^2.2.0",
+    "@pinata/sdk": "^1.1.8",
+    "web3": "^1.2.7",
+    "@truffle/hdwallet-provider": "1.0.31"
+  }
+}

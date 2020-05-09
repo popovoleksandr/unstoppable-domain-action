@@ -1,0 +1,32 @@
+name: 'Unstoppable domain update GitHub action'
+description: 'Action which automates hash update for Unstoppable domain'
+branding:
+  icon: 'server'
+  color: 'white'
+inputs:
+  crypto-domain:
+    description: 'Crypto domain'
+    required: true
+  hash:
+    description: 'New hash to be updated'
+    required: true
+  rpc:
+    description: 'Url of RPC APIs.'
+    required: true
+  mnemonic:
+    description: 'Mnemonic phrase for wallet recovery. Plain PrivateKey can be used as well.'
+    required: true
+  verbose:
+    description: 'Verbose mode'
+    required: false
+    default: false
+  dryRun:
+    description: 'Execution emulation without setting new content hash'
+    required: false
+    default: false
+#outputs:
+#  hash:
+#    description: 'uploaded hash'
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
