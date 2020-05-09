@@ -2238,6 +2238,9 @@ const { namehash } = __webpack_require__(493);
 const registry = '0xD1E5b0FF1287aA9f9A268759062E4Ab08b9Dacbe';
 const ipfsKey = 'ipfs.html.value';
 
+
+let verbose = false;
+
 function CNS(options) {
     const { mnemonic, rpc, name, dryrun, verbose } = options;
 
@@ -2342,6 +2345,7 @@ async function update(options) {
 }
 
 async function run() {
+    verbose = (core.getInput('verbose') === 'true');
 
     if (verbose) {
         console.log('HIT run function')
@@ -2354,7 +2358,6 @@ async function run() {
         const contentHash = core.getInput('hash');
         const contentType = 'ipfs-ns';
         const dryrun = (core.getInput('dryRun') === 'true');
-        const verbose = (core.getInput('verbose') === 'true');
 
         await update({ mnemonic, rpc, name, contentHash, contentType, dryrun, verbose })
             .catch(error => { throw error });
