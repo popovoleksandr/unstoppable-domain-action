@@ -46,6 +46,11 @@ function CNS(options) {
         let resolver;
         try {
             resolver = await getResolver(tokenId);
+
+            if (verbose) {
+                console.log('CONTINUE getResolverContract function')
+                console.log('Resolver: ' + resolver)
+            }
         } catch (error) {
             if (verbose) {
                 console.error(error);
