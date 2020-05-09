@@ -1,27 +1,44 @@
 {
-  "name": "unstoppable-domain-action",
-  "version": "0.0.3",
-  "description": "",
+  "name": "ddns-action",
+  "version": "0.1.2",
+  "description": "DDNS(Distributed Domain Name System) update action",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "eslint index.js && jest",
+    "lint": "eslint --max-warnings 0 **/*.js",
+    "prune-prod": "npm prune --production",
+    "release": "release-it"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anantaramdas/ipfs-pinata-deploy-action.git"
+    "url": "git+https://github.com/aquiladev/ddns-action.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "ENS",
+    "CNS",
+    "DDNS",
+    "GitHub",
+    "action",
+    "update"
+  ],
+  "author": "Sergii Bomko <aquila.ua@gmail.com>",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/anantaramdas/ipfs-pinata-deploy-action/issues"
+    "url": "https://github.com/aquiladev/ddns-action/issues"
   },
-  "homepage": "https://github.com/anantaramdas/ipfs-pinata-deploy-action#readme",
+  "homepage": "https://github.com/aquiladev/ddns-action#readme",
   "dependencies": {
-    "@actions/core": "^1.2.4",
-    "@actions/github": "^2.2.0",
-    "@pinata/sdk": "^1.1.8",
-    "web3": "^1.2.7",
+    "@actions/core": "1.2.2",
+    "@actions/github": "2.1.1",
+    "@triplespeeder/ens-updater": "1.9.0",
     "@truffle/hdwallet-provider": "1.0.31"
-  }
+  },
+  "devDependencies": {
+    "eslint": "6.8.0",
+    "jest": "25.1.0",
+    "release-it": "13.5.7"
+  },
+  "eslintIgnore": [
+    "*.test.js"
+  ]
 }
