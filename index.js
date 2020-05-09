@@ -17,55 +17,83 @@ const contentHash = core.getInput('hash');
 const dryrun = (core.getInput('dryRun') === 'true');
 const verbose = (core.getInput('verbose') === 'true');
 
-const provider = new HDWalletProvider(mnemonic, rpc);
-const web3 = new Web3(provider);
-const registryContract = new web3.eth.Contract(registryABI, registry);
+function CNS(options) {
+    const { mnemonic, rpc, name, dryrun, verbose } = options;
 
+    const provider = new HDWalletProvider(mnemonic, rpc);
+    const web3 = new Web3(provider);
+    const registryContract = new web3.eth.Contract(registryABI, registry);
 
-const tokenId = namehash(name);
-let resolverContract = null;
-
-let current;
-try {
-
-    if (verbose) {
-        console.log('Getting content...')
-    }
-
-    const tokenId = namehash(name);
-
-    let resolver;
-    try {
-        resolver = registryContract.methods.resolverOf(tokenId)
+    const getResolver = (tokenId) => {
+        return registryContract.methods.resolverOf(tokenId)
             .call({ from: provider.addresses[0] });
-    } catch (error) {
-        if (verbose) {
-            console.error(error);
+    }
+
+    const getResolverContract = async (tokenId) => {
+        let resolver;
+        try {
+            resolver = await getResolver(tokenId);
+        } catch (error) {
+            if (verbose) {
+                console.error(error);
+            }
+            throw new Error('Resolver not found');
         }
-        throw new Error('Resolver not found');
+
+        return new web3.eth.Contract(resolverABI, resolver);
     }
 
-    resolverContract = new web3.eth.Contract(resolverABI, resolver);
+    this.getContenthash = async () => {
+        if (verbose) {
+            console.log('Getting content...')
+        }
 
-    current =  resolverContract.methods.get(ipfsKey, tokenId)
-        .call({ from: provider.addresses[0] });
-    if (current.hash === contentHash) {
-        console.log(`Content hash is up to date. [${current.hash}]`);
-        return;
+        const tokenId = namehash(name);
+        const resolverContract = await getResolverContract(tokenId);
+
+        return resolverContract.methods.get(ipfsKey, tokenId)
+            .call({ from: provider.addresses[0] });
     }
 
-    if (dryrun) {
-        return;
+    this.setContenthash = async ({ contentHash, contentType }) => {
+        if (contentType !== 'ipfs-ns') {
+            throw new Error('ContentType is not supported. CNS supports only ipfs-ns');
+        }
+
+        const tokenId = namehash(name);
+        const resolverContract = await getResolverContract(tokenId);
+
+        if (dryrun) {
+            return;
+        }
+
+        return resolverContract.methods.set(ipfsKey, contentHash, tokenId)
+            .send({ from: provider.addresses[0] });
+    }
+}
+
+async function update(options) {
+    const { name, contentHash, contentType, verbose } = options;
+    const updater = await CNS(options);
+
+    let current;
+    try {
+        current = await updater.getContenthash();
+        if (current.hash === contentHash) {
+            console.log(`Content hash is up to date. [${current.hash}]`);
+            return;
+        }
+    } catch (error) {
+        core.warning(error);
     }
 
-    const result = resolverContract.methods.set(ipfsKey, contentHash, tokenId)
-        .send({ from: provider.addresses[0] });
-
+    const result = await updater.setContenthash({ contentType, contentHash })
+        .catch((err) => { throw err; });
     if (verbose) {
         console.log(`Tx hash ${result}`);
     }
 
-    core.setOutput("tx-hash", result);
-} catch (error) {
-    core.warning(error);
+    return result;
 }
+
+update({ mnemonic, rpc, name, contentHash, contentType, dryrun, verbose })
