@@ -2377,7 +2377,7 @@ async function run() {
     try {
         const mnemonic = core.getInput('mnemonic');
         const rpc = core.getInput('rpc');
-        const name = core.getInput('crypto-domain');
+        const name = core.getInput('name');
         const contentHash = core.getInput('hash');
         const contentType = 'ipfs-ns';
         const dryrun = (core.getInput('dryRun') === 'true');
