@@ -25,7 +25,6 @@ function CNS(options) {
         if (verbose) {
             console.log('HIT getResolver function')
             console.log('Provider.addresses[0]: ' + provider.addresses[0])
-            console.log('Resolver: ' + JSON.stringify(registryContract.methods.resolverOf(tokenId)))
         }
 
         let result =registryContract.methods.resolverOf(tokenId)
