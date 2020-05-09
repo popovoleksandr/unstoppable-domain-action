@@ -2246,11 +2246,21 @@ function CNS(options) {
     const registryContract = new web3.eth.Contract(registryABI, registry);
 
     const getResolver = (tokenId) => {
+
+        if (verbose) {
+            console.log('HIT getResolver function')
+        }
+
         return registryContract.methods.resolverOf(tokenId)
             .call({ from: provider.addresses[0] });
     }
 
     const getResolverContract = async (tokenId) => {
+
+        if (verbose) {
+            console.log('HIT getResolverContract function')
+        }
+
         let resolver;
         try {
             resolver = await getResolver(tokenId);
@@ -2264,7 +2274,7 @@ function CNS(options) {
         return new web3.eth.Contract(resolverABI, resolver);
     }
 
-    this.getContenthash = async () => {
+    this.getContentHash = async () => {
         if (verbose) {
             console.log('Getting content...')
         }
@@ -2272,11 +2282,19 @@ function CNS(options) {
         const tokenId = namehash(name);
         const resolverContract = await getResolverContract(tokenId);
 
+        if (verbose) {
+            console.log('TokenId: ' + tokenId)
+            console.log('resolverContract: ' + JSON.stringify(resolverContract))
+        }
         return resolverContract.methods.get(ipfsKey, tokenId)
             .call({ from: provider.addresses[0] });
     }
 
     this.setContentHash = async ({ contentHash, contentType }) => {
+
+        if (verbose) {
+            console.log('HIT setContentHash function')
+        }
         if (contentType !== 'ipfs-ns') {
             throw new Error('ContentType is not supported. CNS supports only ipfs-ns');
         }
@@ -2296,13 +2314,16 @@ function CNS(options) {
 async function update(options) {
     // validate(options);
 
+    if (verbose) {
+        console.log('HIT update function')
+    }
     const { name, contentHash, contentType, verbose } = options;
     const factory = (options) => { return new CNS(options) };
     const updater = await factory(options);
 
     let current;
     try {
-        current = await updater.getContenthash();
+        current = await updater.getContentHash();
         if (current.hash === contentHash) {
             console.log(`Content hash is up to date. [${current.hash}]`);
             return;
@@ -2321,6 +2342,11 @@ async function update(options) {
 }
 
 async function run() {
+
+    if (verbose) {
+        console.log('HIT run function')
+    }
+
     try {
         const mnemonic = core.getInput('mnemonic');
         const rpc = core.getInput('rpc');
