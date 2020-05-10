@@ -20,7 +20,7 @@ inputs:
     description: 'Type of content. Supported types [ipfs-ns, swarm-ns]'
     required: false
     default: 'ipfs-ns'
-  dryRun: 
+  dryRun:
     description: 'Execution emulation without setting new content hash.'
     required: false
     default: false
@@ -30,4 +30,4 @@ inputs:
     default: false
 runs:
   using: 'node12'
-  main: 'index.js'
+  main: './dist/index.js'
