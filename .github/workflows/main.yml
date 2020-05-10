@@ -12,6 +12,6 @@ jobs:
           mnemonic: ${{ secrets.ACTION_MNEMONIC }}
           rpc: ${{ secrets.ACTION_RPC }}
           name: aleksandrpopov.crypto
-          contentHash: 'QmXHZXpTQMcXJxDUjV3YShVQoNcxoo6uaKEY2t2xJ3anxs'
+          contentHash: 'QmTj2t9P8znG1NZvohSJw8rU6gyRd1DkyndNjqTDTkbLRN'
           verbose: true
           dryrun: false
