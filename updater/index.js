@@ -1,12 +1,10 @@
 const core = require('@actions/core');
 
-const ensFactory = require('./ens');
 const CNS = require('./cns');
 
 const supportedTypes = ['ipfs-ns', 'swarm-ns'];
 
 const tldMap = [
-  { name: '.eth', factory: ensFactory },
   { name: '.crypto', factory: (options) => { return new CNS(options) } }
 ]
 
